@@ -14,3 +14,10 @@ def add_new_event(origin_device, payload):
   timestamp = int(round(datetime.now().timestamp()))
   cursor.execute(sql_insert_statement, (timestamp, origin_device, payload))
   conn.commit()
+
+def get_all_events():
+  sql_select_statement = "SELECT * from EVENTOSIO;"
+  conn = get_connection()
+  cursor = conn.cursor()
+  cursor.execute(sql_select_statement)
+  return cursor.fetchall()
