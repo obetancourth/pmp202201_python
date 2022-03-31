@@ -3,6 +3,10 @@ from bottle import route, run, response, request
 # pip install bottle
 import json
 
+from db.alumosdao import createTable, getAllAlumnos, getByCuenta, save_new, update, delete
+import db.alumno
+
+createTable()
 # bottle --> levantar un web server, un servidor en internet que devuelve los
 # recursos solicitados por medio del protocolo http o https.
 # HTTP ---- GET POST
@@ -39,6 +43,39 @@ def newPersona():
   # se debe guardar en una DB :P
   response.content_type = "application/json"
   return json.dumps({"status":"ok","nombre":nombre, "telefono": telefono, "email": email})
+
+# REST API 
+# http://localhost:5000/suma/10/30
+@route('/suma/<num1>/<num2>')
+def sumarest(num1, num2):
+  result = int(num1) + int(num2)
+  response.content_type = "application/json"
+  return json.dumps({"status":"ok","resultado":result, "num1": num1, "num2": num2})
+
+# CRUD
+@route('/alumno/all')
+def getAllalumnos():
+  alumnosDB = getAllAlumnos()
+  alumnosToReturn = list()
+  for alumno in alumnosDB:
+    alumnosToReturn.append(alumno.getDict())
+  return json.dumps({'status':'ok', 'alumnos': alumnosToReturn})
+
+@route('/alumno/new', method='POST')
+def newalumno():
+  return json.dumps({'status':'to implement'})
+
+@route('/alumno/byid/<id>')
+def getalumnoById(id):
+  return json.dumps({'status':'to implement'})
+
+@route('/alumno/update/<id>', method='POST')
+def updatealumno(id):
+  return json.dumps({'status':'to implement'})
+
+@route('/alumno/delete/<id>')
+def deletealumno(id):
+  return json.dumps({'status':'to implement'})
 
 
 run(host="localhost", port=5000, debug=True)
